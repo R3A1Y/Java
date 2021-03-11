@@ -3,10 +3,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Persona {
+    Random Rm = new Random();
     private String nombre = " ";
     private int edad = 0;
     private int cedula;
-    private String sexo = "H";
+    private String sexo = " ";
     private double peso = 0;
     private double altura = 0;
 
@@ -54,11 +55,10 @@ public class Persona {
         this.sexo = sexo;        
     }
 
-    Persona(String nombre, int edad, int cedula, String sexo, double peso,
+    Persona(String nombre, int edad, String sexo, double peso,
      double altura) {
         this.nombre = nombre;
         this.edad = edad;
-        this.cedula = cedula;
         this.sexo = sexo;
         this.peso = peso;
         this.altura = altura;
@@ -75,43 +75,75 @@ public class Persona {
 
     }
 
-    public int calcular_peso_ideal(double altura, double peso){
-        double pesoIdeal = convertir_libra_kilogramos(peso) / (Math.pow(convertir_pie_metro(peso), 2));
+    public String calcular_peso_ideal(){
+        double pesoIdeal = convertir_libra_kilogramos(getPeso()) / (Math.pow(convertir_pie_metro(getAltura()), 2));
+        int save;
         if (pesoIdeal < 20) {
-            return -1;
+            save = -1;
         }
         else if (pesoIdeal >= 20 && pesoIdeal <= 25) {
-            System.out.print("Estas por debajo de tu peso ideal");
-            return 0;
+            
+            save = 0;
+        }       
+        save = 1;
+        if (save == -1) {
+            return " Estas por debajo de tu peso ideal";
         }
-        System.out.print("Estas por encima de tu peso ideal");
-        return 1;
-    }
-    public String mayor_edad(int edad){
-        if (edad < 18) {
-            return "es menor de edad";
+        else if(save == 0){
+            return " Estas en tu peso ideal";
         }
-        return "es mayor de edad";
+        return " Estas por encima de tu peso ideal";
     }
-    public void comprobar_sexo(){
+    public String mayor_edad(){
+        if (getEdad() < 18) {
+            return " es menor de edad";
+        }
+        return " es mayor de edad";
+    }
+    public String comprobar_sexo(){
         if (getSexo() == "M") {
             setSexo(sexo);
         }
+        return " ";
+
     }  
-    public double generar_cedula(){
-        double cedula = Math.random()*10000000000l;
+    private int generar_cedula(){
+        int cedula = Rm.nextInt(900000000) + 100000000;
         return cedula;
     }
     public String toString(){
-        return " ";
+        return "\nSu nombre es: "+getNombre()+ "\nSu edad: " +getEdad()+""+mayor_edad()+ "\nSu cedula: " +generar_cedula()+ "\nSu sexo: "+getSexo()+ "" +comprobar_sexo()+
+        "\nSu peso :"+getPeso()+ "" +calcular_peso_ideal()+ "\nSu altura :"+getAltura();
     }
 
     /********************************************************** */
     public static void main(String[] args) {
-       Persona pr = new Persona();
-       System.out.print(pr.generar_cedula());
-       pr.setSexo();
-       pr.comprobar_sexo();
+        Scanner SC = new Scanner(System.in);
+        String nombre;
+        int edad;
+        String sexo;
+        double peso;
+        double altura;
+
+        System.out.print("Ingrese su nombre: \n");
+        nombre = SC.nextLine();
+
+        System.out.print("Ingrese su edad: \n");
+        edad = SC.nextInt();
+
+        System.out.print("Ingrese su sexualidad \n");
+        sexo = SC.next();
+
+        System.out.print("Ingrese su peso \n");
+        peso = SC.nextDouble();
+
+        System.out.print("Ingrese su altura \n");
+        altura = SC.nextDouble();
+
+       Persona p1 = new Persona(nombre, edad, sexo, peso, altura);
+       
+       System.out.println(p1.toString());
+
     }
     
 }
